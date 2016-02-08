@@ -31,8 +31,8 @@ test('discard query + preserve hash', function (t) {
 test('svg', function (t) {
   return resolveData('fixtures/images/vector.svg')
     .then(function (resolvedDataUrl) {
-      t.is(resolvedDataUrl.slice(0, 32), 'data:image/svg+xml;charset=utf-8');
-      t.is(resolvedDataUrl.slice(-32), '0h80z%22%2F%3E%0D%0A%3C%2Fsvg%3E');
+      t.is(resolvedDataUrl.slice(0, 32), 'data:image/svg+xml;%3Csvg xmlns=');
+      t.is(resolvedDataUrl.slice(-32), '160l40-120h80z%22/%3E %3C/svg%3E');
     }, t.fail);
 });
 
