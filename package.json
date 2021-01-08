@@ -39,11 +39,22 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-import": "^2.22.1",
+    "husky": "^4.3.7",
+    "lint-staged": "^10.5.3",
     "nyc": "^15.1.0",
     "prettier": "^2.2.1",
     "sinon": "^9.2.3"
   },
   "engines": {
     "node": ">=10"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,json,md}": "prettier --write"
   }
 }
