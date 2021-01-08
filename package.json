@@ -37,8 +37,10 @@
     "coveralls": "^3.1.0",
     "eslint": "^7.17.0",
     "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^7.1.0",
     "eslint-plugin-import": "^2.22.1",
     "nyc": "^15.1.0",
+    "prettier": "^2.2.1",
     "sinon": "^9.2.3"
   },
   "engines": {
