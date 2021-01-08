@@ -1,4 +1,5 @@
 *.sublime-*
+.eslintcache
 .eslintrc
 .gitignore
 .npmignore
