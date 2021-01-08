@@ -3,7 +3,7 @@ const path = require("path");
 const sinon = require("sinon");
 const test = require("ava");
 
-const resolveUrl = require("../lib/url");
+const Assets = require("..");
 
 test.before(() => {
   sinon.stub(fs, "statSync").returns({
@@ -15,231 +15,308 @@ test.after(() => {
   fs.statSync.restore();
 });
 
-test("w/o options", (t) =>
-  resolveUrl("test/fixtures/duplicate-1.jpg").then((resolvedUrl) => {
+test("w/o options", (t) => {
+  const instance = new Assets();
+
+  return instance.url("test/fixtures/duplicate-1.jpg").then((resolvedUrl) => {
     t.is(resolvedUrl, "/test/fixtures/duplicate-1.jpg");
-  }));
+  });
+});
 
-test("basePath", (t) =>
-  resolveUrl("duplicate-1.jpg", {
+test("basePath", (t) => {
+  const instance = new Assets({
     basePath: "test/fixtures",
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "/duplicate-1.jpg");
-  }));
+  });
 
-test("baseUrl", (t) =>
-  resolveUrl("test/fixtures/duplicate-1.jpg", {
+  return instance.url("duplicate-1.jpg").then((resolvedUrl) => {
+    t.is(resolvedUrl, "/duplicate-1.jpg");
+  });
+});
+
+test("baseUrl", (t) => {
+  const instance = new Assets({
     baseUrl: "http://example.com/wp-content/themes",
-  }).then((resolvedUrl) => {
+  });
+
+  return instance.url("test/fixtures/duplicate-1.jpg").then((resolvedUrl) => {
     t.is(
       resolvedUrl,
       "http://example.com/wp-content/themes/test/fixtures/duplicate-1.jpg"
     );
-  }));
+  });
+});
 
-test("loadPaths", (t) =>
-  resolveUrl("picture.png", {
+test("loadPaths", (t) => {
+  const instance = new Assets({
     loadPaths: ["test/fixtures/fonts", "test/fixtures/images"],
-  }).then((resolvedUrl) => {
+  });
+
+  return instance.url("picture.png").then((resolvedUrl) => {
     t.is(resolvedUrl, "/test/fixtures/images/picture.png");
-  }));
+  });
+});
 
-test("relativeTo", (t) =>
-  resolveUrl("test/fixtures/images/picture.png", {
+test("relativeTo", (t) => {
+  const instance = new Assets({
     relativeTo: "test/fixtures/fonts",
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "../images/picture.png");
-  }));
+  });
 
-test("basePath + baseUrl", (t) =>
-  resolveUrl("duplicate-1.jpg", {
+  return instance
+    .url("test/fixtures/images/picture.png")
+    .then((resolvedUrl) => {
+      t.is(resolvedUrl, "../images/picture.png");
+    });
+});
+
+test("basePath + baseUrl", (t) => {
+  const instance = new Assets({
     basePath: "test/fixtures",
     baseUrl: "http://example.com/wp-content/themes",
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "http://example.com/wp-content/themes/duplicate-1.jpg");
-  }));
+  });
 
-test("basePath + loadPaths", (t) =>
-  resolveUrl("picture.png", {
+  return instance.url("duplicate-1.jpg").then((resolvedUrl) => {
+    t.is(resolvedUrl, "http://example.com/wp-content/themes/duplicate-1.jpg");
+  });
+});
+
+test("basePath + loadPaths", (t) => {
+  const instance = new Assets({
     basePath: "test/fixtures",
     loadPaths: ["fonts", "images"],
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "/images/picture.png");
-  }));
+  });
 
-test("basePath + relativeTo", (t) =>
-  resolveUrl("images/picture.png", {
+  return instance.url("picture.png").then((resolvedUrl) => {
+    t.is(resolvedUrl, "/images/picture.png");
+  });
+});
+
+test("basePath + relativeTo", (t) => {
+  const instance = new Assets({
     basePath: "test/fixtures",
     relativeTo: "fonts",
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "../images/picture.png");
-  }));
+  });
 
-test("baseUrl + loadPaths", (t) =>
-  resolveUrl("picture.png", {
+  return instance.url("images/picture.png").then((resolvedUrl) => {
+    t.is(resolvedUrl, "../images/picture.png");
+  });
+});
+
+test("baseUrl + loadPaths", (t) => {
+  const instance = new Assets({
     baseUrl: "http://example.com/wp-content/themes",
     loadPaths: ["test/fixtures/fonts", "test/fixtures/images"],
-  }).then((resolvedUrl) => {
+  });
+
+  return instance.url("picture.png").then((resolvedUrl) => {
     t.is(
       resolvedUrl,
       "http://example.com/wp-content/themes/test/fixtures/images/picture.png"
     );
-  }));
+  });
+});
 
-test("baseUrl + relativeTo", (t) =>
-  resolveUrl("test/fixtures/images/picture.png", {
+test("baseUrl + relativeTo", (t) => {
+  const instance = new Assets({
     baseUrl: "http://example.com/wp-content/themes",
     relativeTo: "test/fixtures/fonts",
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "../images/picture.png");
-  }));
+  });
 
-test("loadPaths + relativeTo", (t) =>
-  resolveUrl("picture.png", {
+  return instance
+    .url("test/fixtures/images/picture.png")
+    .then((resolvedUrl) => {
+      t.is(resolvedUrl, "../images/picture.png");
+    });
+});
+
+test("loadPaths + relativeTo", (t) => {
+  const instance = new Assets({
     loadPaths: ["test/fixtures/fonts", "test/fixtures/images"],
     relativeTo: "test/fixtures/fonts",
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "../images/picture.png");
-  }));
+  });
 
-test("basePath + baseUrl + loadPaths", (t) =>
-  resolveUrl("picture.png", {
+  return instance.url("picture.png").then((resolvedUrl) => {
+    t.is(resolvedUrl, "../images/picture.png");
+  });
+});
+
+test("basePath + baseUrl + loadPaths", (t) => {
+  const instance = new Assets({
     basePath: "test/fixtures",
     baseUrl: "http://example.com/wp-content/themes",
     loadPaths: ["fonts", "images"],
-  }).then((resolvedUrl) => {
+  });
+
+  return instance.url("picture.png").then((resolvedUrl) => {
     t.is(
       resolvedUrl,
       "http://example.com/wp-content/themes/images/picture.png"
     );
-  }));
+  });
+});
 
-test("basePath + baseUrl + relativeTo", (t) =>
-  resolveUrl("images/picture.png", {
+test("basePath + baseUrl + relativeTo", (t) => {
+  const instance = new Assets({
     basePath: "test/fixtures",
     baseUrl: "http://example.com/wp-content/themes",
     relativeTo: "fonts",
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "../images/picture.png");
-  }));
+  });
 
-test("basePath + loadPaths + relativeTo", (t) =>
-  resolveUrl("picture.png", {
+  return instance.url("images/picture.png").then((resolvedUrl) => {
+    t.is(resolvedUrl, "../images/picture.png");
+  });
+});
+
+test("basePath + loadPaths + relativeTo", (t) => {
+  const instance = new Assets({
     basePath: "test/fixtures",
     loadPaths: ["fonts", "images"],
     relativeTo: "fonts",
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "../images/picture.png");
-  }));
+  });
 
-test("baseUrl + loadPaths + relativeTo", (t) =>
-  resolveUrl("picture.png", {
+  return instance.url("picture.png").then((resolvedUrl) => {
+    t.is(resolvedUrl, "../images/picture.png");
+  });
+});
+
+test("baseUrl + loadPaths + relativeTo", (t) => {
+  const instance = new Assets({
     baseUrl: "http://example.com/wp-content/themes",
     loadPaths: ["test/fixtures/fonts", "test/fixtures/images"],
     relativeTo: "test/fixtures/fonts",
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "../images/picture.png");
-  }));
+  });
 
-test("basePath + baseUrl + loadPaths + relativeTo", (t) =>
-  resolveUrl("picture.png", {
+  return instance.url("picture.png").then((resolvedUrl) => {
+    t.is(resolvedUrl, "../images/picture.png");
+  });
+});
+
+test("basePath + baseUrl + loadPaths + relativeTo", (t) => {
+  const instance = new Assets({
     basePath: "test/fixtures",
     baseUrl: "http://example.com/wp-content/themes",
     loadPaths: ["fonts", "images"],
     relativeTo: "fonts",
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "../images/picture.png");
-  }));
+  });
 
-test("absolute basePath + relativeTo", (t) =>
-  resolveUrl("images/picture.png", {
+  return instance.url("picture.png").then((resolvedUrl) => {
+    t.is(resolvedUrl, "../images/picture.png");
+  });
+});
+
+test("absolute basePath + relativeTo", (t) => {
+  const instance = new Assets({
     basePath: path.resolve("test/fixtures"),
     relativeTo: path.resolve("test/fixtures/fonts"),
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "../images/picture.png");
-  }));
+  });
 
-test("non-existing file", (t) =>
-  resolveUrl("non-existing.gif").then(t.fail, (err) => {
+  return instance.url("images/picture.png").then((resolvedUrl) => {
+    t.is(resolvedUrl, "../images/picture.png");
+  });
+});
+
+test("non-existing file", (t) => {
+  const instance = new Assets();
+
+  return instance.url("non-existing.gif").then(t.fail, (err) => {
     t.true(err instanceof Error);
     t.is(err.message, "Asset not found or unreadable: non-existing.gif");
-  }));
+  });
+});
 
-test("baseUrl w/ trailing slash", (t) =>
-  resolveUrl("test/fixtures/images/picture.png", {
+test("baseUrl w/ trailing slash", (t) => {
+  const instance = new Assets({
     baseUrl: "http://example.com/wp-content/themes/",
-  }).then((resolvedUrl) => {
-    t.is(
-      resolvedUrl,
-      "http://example.com/wp-content/themes/test/fixtures/images/picture.png"
-    );
-  }));
+  });
 
-test("default cachebuster", (t) =>
-  resolveUrl("test/fixtures/duplicate-1.jpg", {
+  return instance
+    .url("test/fixtures/images/picture.png")
+    .then((resolvedUrl) => {
+      t.is(
+        resolvedUrl,
+        "http://example.com/wp-content/themes/test/fixtures/images/picture.png"
+      );
+    });
+});
+
+test("default cachebuster", (t) => {
+  const instance = new Assets({
     cachebuster: true,
-  }).then((resolvedUrl) => {
+  });
+
+  return instance.url("test/fixtures/duplicate-1.jpg").then((resolvedUrl) => {
     t.is(resolvedUrl, "/test/fixtures/duplicate-1.jpg?9f057edc00");
-  }));
+  });
+});
 
-test("custom cachebuster w/ falsy result", (t) =>
-  resolveUrl("test/fixtures/duplicate-1.jpg", {
-    cachebuster() {},
-  }).then((resolvedUrl) => {
+test("custom cachebuster w/ falsy result", (t) => {
+  const instance = new Assets({
+    cachebuster: () => {},
+  });
+
+  return instance.url("test/fixtures/duplicate-1.jpg").then((resolvedUrl) => {
     t.is(resolvedUrl, "/test/fixtures/duplicate-1.jpg");
-  }));
+  });
+});
 
-test("custom cachebuster w/ string result", (t) =>
-  resolveUrl("test/fixtures/duplicate-1.jpg", {
-    cachebuster() {
-      return "bust";
-    },
-  }).then((resolvedUrl) => {
+test("custom cachebuster w/ string result", (t) => {
+  const instance = new Assets({
+    cachebuster: () => "bust",
+  });
+
+  return instance.url("test/fixtures/duplicate-1.jpg").then((resolvedUrl) => {
     t.is(resolvedUrl, "/test/fixtures/duplicate-1.jpg?bust");
-  }));
+  });
+});
 
-test("custom cachebuster w/ number result", (t) =>
-  resolveUrl("test/fixtures/duplicate-1.jpg", {
-    cachebuster() {
-      return 42;
-    },
-  }).then((resolvedUrl) => {
+test("custom cachebuster w/ number result", (t) => {
+  const instance = new Assets({
+    cachebuster: () => 42,
+  });
+
+  return instance.url("test/fixtures/duplicate-1.jpg").then((resolvedUrl) => {
     t.is(resolvedUrl, "/test/fixtures/duplicate-1.jpg?42");
-  }));
+  });
+});
 
-test("custom cachebuster w/ pathname", (t) =>
-  resolveUrl("test/fixtures/duplicate-1.jpg", {
-    cachebuster() {
-      return { pathname: "/foo.png" };
-    }, // TODO leading slash
-  }).then((resolvedUrl) => {
+test("custom cachebuster w/ pathname", (t) => {
+  const instance = new Assets({
+    cachebuster: () => ({ pathname: "/foo.png" }), // TODO leading slash
+  });
+
+  return instance.url("test/fixtures/duplicate-1.jpg").then((resolvedUrl) => {
     t.is(resolvedUrl, "/foo.png");
-  }));
+  });
+});
 
-test("custom cachebuster w/ query", (t) =>
-  resolveUrl("test/fixtures/duplicate-1.jpg", {
-    cachebuster() {
-      return { query: "bust" };
-    },
-  }).then((resolvedUrl) => {
+test("custom cachebuster w/ query", (t) => {
+  const instance = new Assets({
+    cachebuster: () => ({ query: "bust" }),
+  });
+
+  return instance.url("test/fixtures/duplicate-1.jpg").then((resolvedUrl) => {
     t.is(resolvedUrl, "/test/fixtures/duplicate-1.jpg?bust");
-  }));
+  });
+});
 
-test("custom cachebuster w/ pathname + query", (t) =>
-  resolveUrl("test/fixtures/duplicate-1.jpg", {
-    cachebuster() {
-      return { pathname: "/foo.png", query: "bust" };
-    }, // TODO leading slash
-  }).then((resolvedUrl) => {
+test("custom cachebuster w/ pathname + query", (t) => {
+  const instance = new Assets({
+    cachebuster: () => ({ pathname: "/foo.png", query: "bust" }), // TODO leading slash
+  });
+
+  return instance.url("test/fixtures/duplicate-1.jpg").then((resolvedUrl) => {
     t.is(resolvedUrl, "/foo.png?bust");
-  }));
+  });
+});
 
 test("custom cachebuster arguments", (t) => {
   const cachebuster = sinon.spy();
-  return resolveUrl("duplicate-1.jpg", {
+
+  const instance = new Assets({
     basePath: "test/fixtures",
     cachebuster,
-  }).then(() => {
+  });
+
+  return instance.url("duplicate-1.jpg").then(() => {
     t.true(cachebuster.calledOnce);
     t.is(cachebuster.lastCall.args.length, 2);
     t.is(
@@ -250,80 +327,113 @@ test("custom cachebuster arguments", (t) => {
   }, t.fail);
 });
 
-test("query + hash", (t) =>
-  resolveUrl("test/fixtures/images/picture.png?foo=bar&baz#hash").then(
-    (resolvedUrl) => {
+test("query + hash", (t) => {
+  const instance = new Assets();
+
+  return instance
+    .url("test/fixtures/images/picture.png?foo=bar&baz#hash")
+    .then((resolvedUrl) => {
       t.is(resolvedUrl, "/test/fixtures/images/picture.png?foo=bar&baz#hash");
-    }
-  ));
+    });
+});
 
-test("query + hash w/ default cachebuster", (t) =>
-  resolveUrl("test/fixtures/images/picture.png?foo=bar&baz#hash", {
+test("query + hash w/ default cachebuster", (t) => {
+  const instance = new Assets({
     cachebuster: true,
-  }).then((resolvedUrl) => {
-    t.is(
-      resolvedUrl,
-      "/test/fixtures/images/picture.png?foo=bar&baz&9f057edc00#hash"
-    );
-  }));
+  });
 
-test("query + hash w/ custom cachebuster w/ falsy result", (t) =>
-  resolveUrl("test/fixtures/images/picture.png?foo=bar&baz#hash", {
-    cachebuster() {},
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "/test/fixtures/images/picture.png?foo=bar&baz#hash");
-  }));
+  return instance
+    .url("test/fixtures/images/picture.png?foo=bar&baz#hash")
+    .then((resolvedUrl) => {
+      t.is(
+        resolvedUrl,
+        "/test/fixtures/images/picture.png?foo=bar&baz&9f057edc00#hash"
+      );
+    });
+});
 
-test("query + hash w/ custom cachebuster w/ string result", (t) =>
-  resolveUrl("test/fixtures/images/picture.png?foo=bar&baz#hash", {
-    cachebuster() {
-      return "bust";
-    },
-  }).then((resolvedUrl) => {
-    t.is(
-      resolvedUrl,
-      "/test/fixtures/images/picture.png?foo=bar&baz&bust#hash"
-    );
-  }));
+test("query + hash w/ custom cachebuster w/ falsy result", (t) => {
+  const instance = new Assets({
+    cachebuster: () => {},
+  });
 
-test("query + hash w/ custom cachebuster w/ pathname", (t) =>
-  resolveUrl("test/fixtures/images/picture.png?foo=bar&baz#hash", {
-    cachebuster() {
-      return { pathname: "/foo.png" };
-    }, // TODO leading slash
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "/foo.png?foo=bar&baz#hash");
-  }));
+  return instance
+    .url("test/fixtures/images/picture.png?foo=bar&baz#hash")
+    .then((resolvedUrl) => {
+      t.is(resolvedUrl, "/test/fixtures/images/picture.png?foo=bar&baz#hash");
+    });
+});
 
-test("query + hash w/ custom cachebuster w/ query", (t) =>
-  resolveUrl("test/fixtures/images/picture.png?foo=bar&baz#hash", {
-    cachebuster() {
-      return { query: "bust" };
-    },
-  }).then((resolvedUrl) => {
-    t.is(
-      resolvedUrl,
-      "/test/fixtures/images/picture.png?foo=bar&baz&bust#hash"
-    );
-  }));
+test("query + hash w/ custom cachebuster w/ string result", (t) => {
+  const instance = new Assets({
+    cachebuster: () => "bust",
+  });
 
-test("query + hash w/ custom cachebuster w/ pathname + query", (t) =>
-  resolveUrl("test/fixtures/images/picture.png?foo=bar&baz#hash", {
-    cachebuster() {
-      return { pathname: "/foo.png", query: "bust" };
-    }, // TODO leading slash
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "/foo.png?foo=bar&baz&bust#hash");
-  }));
+  return instance
+    .url("test/fixtures/images/picture.png?foo=bar&baz#hash")
+    .then((resolvedUrl) => {
+      t.is(
+        resolvedUrl,
+        "/test/fixtures/images/picture.png?foo=bar&baz&bust#hash"
+      );
+    });
+});
 
-test("query + hash w/ relativeTo", (t) =>
-  resolveUrl("test/fixtures/images/picture.png?foo=bar&baz#hash", {
+test("query + hash w/ custom cachebuster w/ pathname", (t) => {
+  const instance = new Assets({
+    cachebuster: () => ({ pathname: "/foo.png" }), // TODO leading slash
+  });
+
+  return instance
+    .url("test/fixtures/images/picture.png?foo=bar&baz#hash")
+    .then((resolvedUrl) => {
+      t.is(resolvedUrl, "/foo.png?foo=bar&baz#hash");
+    });
+});
+
+test("query + hash w/ custom cachebuster w/ query", (t) => {
+  const instance = new Assets({
+    cachebuster: () => ({ query: "bust" }),
+  });
+
+  return instance
+    .url("test/fixtures/images/picture.png?foo=bar&baz#hash")
+    .then((resolvedUrl) => {
+      t.is(
+        resolvedUrl,
+        "/test/fixtures/images/picture.png?foo=bar&baz&bust#hash"
+      );
+    });
+});
+
+test("query + hash w/ custom cachebuster w/ pathname + query", (t) => {
+  const instance = new Assets({
+    cachebuster: () => ({ pathname: "/foo.png", query: "bust" }), // TODO leading slash
+  });
+
+  return instance
+    .url("test/fixtures/images/picture.png?foo=bar&baz#hash")
+    .then((resolvedUrl) => {
+      t.is(resolvedUrl, "/foo.png?foo=bar&baz&bust#hash");
+    });
+});
+
+test("query + hash w/ relativeTo", (t) => {
+  const instance = new Assets({
     relativeTo: "test/fixtures/fonts",
-  }).then((resolvedUrl) => {
-    t.is(resolvedUrl, "../images/picture.png?foo=bar&baz#hash");
-  }));
+  });
 
-test("URI-encoded needle", (t) =>
-  resolveUrl("test/fixtures/white%20space.txt").then((resolvedUrl) => {
+  return instance
+    .url("test/fixtures/images/picture.png?foo=bar&baz#hash")
+    .then((resolvedUrl) => {
+      t.is(resolvedUrl, "../images/picture.png?foo=bar&baz#hash");
+    });
+});
+
+test("URI-encoded needle", (t) => {
+  const instance = new Assets();
+
+  return instance.url("test/fixtures/white%20space.txt").then((resolvedUrl) => {
     t.is(resolvedUrl, "/test/fixtures/white%20space.txt");
-  }));
+  });
+});
