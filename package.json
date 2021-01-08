@@ -21,7 +21,6 @@
   },
   "dependencies": {
     "async": "^3.2.0",
-    "bluebird": "^3.7.2",
     "calipers": "^2.0.1",
     "calipers-gif": "^2.0.0",
     "calipers-jpeg": "^2.0.0",

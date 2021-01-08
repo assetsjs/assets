@@ -85,34 +85,3 @@ test("prioritize firsts loadPaths over the lasts", (t) =>
   }).then((resolvedPath) => {
     t.is(resolvedPath, path.resolve("test/fixtures/fonts/duplicate-2.txt"));
   }));
-
-test.cb("node-style callback w/ options", (t) => {
-  resolvePath("test/fixtures/duplicate-1.jpg", (err, resolvedPath) => {
-    t.is(err, null);
-    t.is(resolvedPath, path.resolve("test/fixtures/duplicate-1.jpg"));
-    t.end();
-  });
-});
-
-test.cb("node-style callback w/o options", (t) => {
-  resolvePath(
-    "duplicate-1.jpg",
-    {
-      basePath: "test/fixtures",
-    },
-    (err, resolvedPath) => {
-      t.is(err, null);
-      t.is(resolvedPath, path.resolve("test/fixtures/duplicate-1.jpg"));
-      t.end();
-    }
-  );
-});
-
-test.cb("node-style callback + non-existing file", (t) => {
-  resolvePath("non-existing.gif", (err, resolvedPath) => {
-    t.true(err instanceof Error);
-    t.is(err.message, "Asset not found or unreadable: non-existing.gif");
-    t.is(resolvedPath, undefined);
-    t.end();
-  });
-});

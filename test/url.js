@@ -327,34 +327,3 @@ test("URI-encoded needle", (t) =>
   resolveUrl("test/fixtures/white%20space.txt").then((resolvedUrl) => {
     t.is(resolvedUrl, "/test/fixtures/white%20space.txt");
   }));
-
-test.cb("node-style callback w/o options", (t) => {
-  resolveUrl("test/fixtures/duplicate-1.jpg", (err, resolvedUrl) => {
-    t.is(err, null);
-    t.is(resolvedUrl, "/test/fixtures/duplicate-1.jpg");
-    t.end();
-  });
-});
-
-test.cb("node-style callback w/ options", (t) => {
-  resolveUrl(
-    "duplicate-1.jpg",
-    {
-      basePath: "test/fixtures",
-    },
-    (err, resolvedUrl) => {
-      t.is(err, null);
-      t.is(resolvedUrl, "/duplicate-1.jpg");
-      t.end();
-    }
-  );
-});
-
-test.cb("node-style callback + non-existing file", (t) => {
-  resolveUrl("non-existing.gif", (err, resolvedUrl) => {
-    t.true(err instanceof Error);
-    t.is(err.message, "Asset not found or unreadable: non-existing.gif");
-    t.is(resolvedUrl, undefined);
-    t.end();
-  });
-});

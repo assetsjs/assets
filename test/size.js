@@ -35,33 +35,3 @@ test("invalid file", (t) =>
     t.true(err instanceof Error);
     t.is(err.message, `Invalid JPEG file: ${absolutePath}`);
   }));
-
-test.cb("node-style callback w/o options", (t) => {
-  resolveSize("test/fixtures/duplicate-1.jpg", (err, size) => {
-    t.deepEqual(size, { width: 200, height: 114 });
-    t.end();
-  });
-});
-
-test.cb("node-style callback w/ options", (t) => {
-  resolveSize(
-    "picture.png",
-    {
-      basePath: "test/fixtures",
-      loadPaths: ["fonts", "images"],
-    },
-    (err, size) => {
-      t.deepEqual(size, { width: 200, height: 57 });
-      t.end();
-    }
-  );
-});
-
-test.cb("node-style callback + non-existing file", (t) => {
-  resolveSize("non-existing.gif", (err, size) => {
-    t.true(err instanceof Error);
-    t.is(err.message, "Asset not found or unreadable: non-existing.gif");
-    t.is(size, undefined);
-    t.end();
-  });
-});
