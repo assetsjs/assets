@@ -16,13 +16,15 @@ Updates package dependencies.
 ## 2.1.0
 
 Allows globs to be passed to `loadPaths`:
+
 ```js
-var options = { loadPaths: ['assets/*'] };
+var options = { loadPaths: ["assets/*"] };
 ```
 
 Also, `loadPaths` now also accepts a single string instead of an array:
+
 ```js
-var options = { loadPaths: 'images' };
+var options = { loadPaths: "images" };
 ```
 
 ## 2.0.0
