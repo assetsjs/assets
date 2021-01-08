@@ -19,7 +19,6 @@ test.after(() => {
 
 test("constructor", (t) => {
   t.deepEqual(typeof Assets, "function", "is a function");
-  // eslint-disable-next-line new-cap
   t.true(Assets() instanceof Assets, "instantiable without new");
   t.true(Object.isFrozen(new Assets()), "is frozen");
 });
