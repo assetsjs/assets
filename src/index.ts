@@ -2,7 +2,7 @@ import extend from "lodash/extend";
 import resolveData from "./data";
 import resolvePath from "./path";
 import resolveSize from "./size";
-import { Options } from "./types";
+import { Dimensions, Options } from "./types";
 import resolveUrl from "./url";
 
 class Assets {
@@ -16,15 +16,15 @@ class Assets {
     return resolveData(path, this.options);
   }
 
-  path(path: string): Promise<any> {
+  path(path: string): Promise<string> {
     return resolvePath(path, this.options);
   }
 
-  size(path: string): Promise<any> {
+  size(path: string): Promise<Dimensions> {
     return resolveSize(path, this.options);
   }
 
-  url(path: string): Promise<any> {
+  url(path: string): Promise<string> {
     return resolveUrl(path, this.options);
   }
 }

@@ -6,7 +6,7 @@ import defaultCachebuster from "./__utils__/defaultCachebuster";
 import resolvePath from "./path";
 import { Options } from "./types";
 
-export default (to: string, options: Options): Promise<any> => {
+export default (to: string, options: Options): Promise<string> => {
   const basePath = options.basePath || ".";
   const baseUrl = options.baseUrl || "/";
   const cachebuster =
