@@ -1,14 +1,14 @@
-const async = require("async");
-const extend = require("lodash/extend");
-const flatten = require("lodash/flatten");
-const glob = require("glob");
-const path = require("path");
-const util = require("util");
-const exists = require("./__utils__/exists");
+import async from "async";
+import extend from "lodash/extend";
+import flatten from "lodash/flatten";
+import glob from "glob";
+import path from "path";
+import util from "util";
+import exists from "./__utils__/exists";
 
 const pglob = util.promisify(glob);
 
-module.exports = (to, options) => {
+export default (to, options): Promise<any> => {
   /* eslint-disable no-param-reassign */
 
   options = extend(

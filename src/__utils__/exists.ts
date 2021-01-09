@@ -1,6 +1,6 @@
-const fs = require("fs");
+import fs from "fs";
 
-module.exports = (filePath, callback) => {
+export default (filePath, callback) => {
   fs.stat(filePath, (err) => {
     callback(null, err === null);
   });

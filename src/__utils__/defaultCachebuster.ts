@@ -1,6 +1,6 @@
-const fs = require("fs");
+import fs from "fs";
 
-module.exports = (resolvedPath) => {
+export default (resolvedPath) => {
   const { mtime } = fs.statSync(resolvedPath);
   return mtime.getTime().toString(16);
 };

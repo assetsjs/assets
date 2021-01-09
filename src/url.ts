@@ -1,12 +1,12 @@
-const extend = require("lodash/extend");
-const url = require("url");
-const composeAbsolutePathname = require("./__utils__/composeAbsolutePathname");
-const composeQueryString = require("./__utils__/composeQueryString");
-const composeRelativePathname = require("./__utils__/composeRelativePathname");
-const defaultCachebuster = require("./__utils__/defaultCachebuster");
-const resolvePath = require("./path");
+import extend from "lodash/extend";
+import url from "url";
+import composeAbsolutePathname from "./__utils__/composeAbsolutePathname";
+import composeQueryString from "./__utils__/composeQueryString";
+import composeRelativePathname from "./__utils__/composeRelativePathname";
+import defaultCachebuster from "./__utils__/defaultCachebuster";
+import resolvePath from "./path";
 
-module.exports = (to, options) => {
+export default (to, options): Promise<any> => {
   /* eslint-disable no-param-reassign */
 
   options = extend(
@@ -27,7 +27,7 @@ module.exports = (to, options) => {
 
   const toUrl = url.parse(to);
 
-  return resolvePath(decodeURI(toUrl.pathname), options).then(
+  return resolvePath(decodeURI(toUrl.pathname!), options).then(
     (resolvedPath) => {
       let cachebusterOutput;
 

@@ -1,8 +1,10 @@
 *.sublime-*
 *.tgz
+.DS_Store
 .eslintcache
 .nyc_output
 coverage
+lib
 node_modules
 npm-debug.log
 package-lock.json

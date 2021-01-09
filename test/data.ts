@@ -1,6 +1,6 @@
-const test = require("ava");
+import test from "ava";
 
-const Assets = require("..");
+import Assets from "../src/index";
 
 test("w/o options", (t) => {
   const instance = new Assets();

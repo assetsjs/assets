@@ -1,7 +1,7 @@
-const path = require("path");
-const test = require("ava");
+import path from "path";
+import test from "ava";
 
-const Assets = require("..");
+import Assets from "../src/index";
 
 test("w/o options", (t) => {
   const instance = new Assets();

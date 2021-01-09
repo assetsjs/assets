@@ -1,4 +1,4 @@
-module.exports = (buffer, mediaType) => {
+export default (buffer, mediaType) => {
   if (mediaType === "image/svg+xml") {
     return `charset=utf-8,${encodeURIComponent(
       buffer.toString("utf8").trim()

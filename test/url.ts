@@ -1,18 +1,20 @@
-const fs = require("fs");
-const path = require("path");
-const sinon = require("sinon");
-const test = require("ava");
+import fs from "fs";
+import path from "path";
+import sinon from "sinon";
+import test from "ava";
 
-const Assets = require("..");
+import Assets from "../src/index";
+
+let statSyncStub: sinon.SinonStub;
 
 test.before(() => {
-  sinon.stub(fs, "statSync").returns({
+  statSyncStub = sinon.stub(fs, "statSync").returns({
     mtime: new Date(Date.UTC(1991, 7, 24)),
-  });
+  } as fs.Stats);
 });
 
 test.after(() => {
-  fs.statSync.restore();
+  statSyncStub.restore();
 });
 
 test("w/o options", (t) => {

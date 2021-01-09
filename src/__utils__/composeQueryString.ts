@@ -1,4 +1,4 @@
-module.exports = (current, addon) => {
+export default (current, addon) => {
   if (current) {
     return `${current}&${addon}`;
   }

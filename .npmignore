@@ -1,4 +1,5 @@
 *.sublime-*
+*.tgz
 .eslintcache
 .eslintrc
 .gitignore
@@ -6,7 +7,10 @@
 .nyc_output
 .travis.yml
 appveyor.yml
+ava.config.js
 coverage
 media
 npm-debug.log
+src
 test
+tsconfig.json

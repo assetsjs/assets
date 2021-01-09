@@ -1,11 +1,11 @@
-const extend = require("lodash/extend");
-const fsPromises = require("fs").promises;
-const mime = require("mime");
-const url = require("url");
-const resolvePath = require("./path");
-const encodeBuffer = require("./__utils__/encodeBuffer");
+import extend from "lodash/extend";
+import { promises as fsPromises } from "fs";
+import mime from "mime";
+import url from "url";
+import resolvePath from "./path";
+import encodeBuffer from "./__utils__/encodeBuffer";
 
-module.exports = (to, options) => {
+export default (to, options): Promise<any> => {
   /* eslint-disable no-param-reassign */
 
   options = extend(
