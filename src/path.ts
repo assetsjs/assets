@@ -8,7 +8,7 @@ import exists from "./__utils__/exists";
 
 const pglob = util.promisify(glob);
 
-export default (to: string, options: any): Promise<any> => {
+export default (to: string, options: any): Promise<string> => {
   /* eslint-disable no-param-reassign */
 
   options = extend(
