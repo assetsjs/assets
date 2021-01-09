@@ -1,5 +1,6 @@
 import path from "path";
 import url from "url";
+
 import convertPathToUrl from "./convertPathToUrl";
 
 export default (urlStr: string): string => {

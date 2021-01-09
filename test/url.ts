@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
-import sinon from "sinon";
+
 import test from "ava";
+import sinon from "sinon";
 
 import Assets from "../src/index";
 

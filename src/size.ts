@@ -1,9 +1,10 @@
 import calipers from "calipers";
-import webp from "calipers-webp";
-import png from "calipers-png";
-import jpeg from "calipers-jpeg";
 import gif from "calipers-gif";
+import jpeg from "calipers-jpeg";
+import png from "calipers-png";
 import svg from "calipers-svg";
+import webp from "calipers-webp";
+
 import resolvePath from "./path";
 import { Dimensions, Options } from "./types";
 

@@ -1,4 +1,5 @@
 import extend from "lodash/extend";
+
 import resolveData from "./data";
 import resolvePath from "./path";
 import resolveSize from "./size";

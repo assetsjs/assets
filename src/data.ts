@@ -1,9 +1,11 @@
 import { promises as fsPromises } from "fs";
-import mime from "mime";
 import url from "url";
+
+import mime from "mime";
+
+import encodeBuffer from "./__utils__/encodeBuffer";
 import resolvePath from "./path";
 import { Options } from "./types";
-import encodeBuffer from "./__utils__/encodeBuffer";
 
 export default (to: string, options: Options): Promise<string> => {
   const toUrl = url.parse(to);

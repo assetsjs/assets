@@ -18,6 +18,22 @@ module.exports = {
         project: "./tsconfig.eslint.json",
       },
       plugins: ["@typescript-eslint"],
+      rules: {
+        // Group the imports in a more structured way:
+        "import/order": [
+          "warn",
+          {
+            alphabetize: { order: "asc" },
+            groups: [
+              "builtin",
+              "external",
+              "internal",
+              ["parent", "sibling", "index"],
+            ],
+            "newlines-between": "always",
+          },
+        ],
+      },
     },
   ],
   root: true,

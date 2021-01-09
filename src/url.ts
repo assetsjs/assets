@@ -1,4 +1,5 @@
 import url from "url";
+
 import composeAbsolutePathname from "./__utils__/composeAbsolutePathname";
 import composeQueryString from "./__utils__/composeQueryString";
 import composeRelativePathname from "./__utils__/composeRelativePathname";

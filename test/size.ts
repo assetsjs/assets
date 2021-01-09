@@ -1,4 +1,5 @@
 import path from "path";
+
 import test from "ava";
 
 import Assets from "../src/index";

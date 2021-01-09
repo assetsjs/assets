@@ -1,5 +1,6 @@
 import path from "path";
 import url from "url";
+
 import convertPathToUrl from "./convertPathToUrl";
 import ensureTrailingSlash from "./ensureTrailingSlash";
 
