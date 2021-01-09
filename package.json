@@ -17,7 +17,8 @@
   "repository": "borodean/assets",
   "scripts": {
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
-    "test": "eslint --ignore-path .gitignore . && nyc --reporter=text --reporter=html ./node_modules/ava/cli.js"
+    "lint": "eslint --ignore-path .gitignore .",
+    "test": "npm run lint && nyc --reporter=text --reporter=html ./node_modules/ava/cli.js"
   },
   "dependencies": {
     "async": "^3.2.0",
