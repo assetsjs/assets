@@ -25,7 +25,7 @@ test("basePath + loadPaths", (t) => {
 test("non-existing file", (t) => {
   const instance = new Assets();
 
-  return instance.size("non-existing.gif").then(t.fail, (err) => {
+  return instance.size("non-existing.gif").then(t.fail, (err: Error) => {
     t.true(err instanceof Error);
     t.is(err.message, "Asset not found or unreadable: non-existing.gif");
   });
@@ -36,7 +36,7 @@ test("nonsupported file type", (t) => {
 
   return instance
     .size("test/fixtures/fonts/empty-sans.woff")
-    .then(t.fail, (err) => {
+    .then(t.fail, (err: Error) => {
       const absolutePath = path.resolve("test/fixtures/fonts/empty-sans.woff");
       t.true(err instanceof Error);
       t.is(err.message, `File type not supported: ${absolutePath}`);
@@ -46,9 +46,11 @@ test("nonsupported file type", (t) => {
 test("invalid file", (t) => {
   const instance = new Assets();
 
-  return instance.size("test/fixtures/invalid.jpg").then(t.fail, (err) => {
-    const absolutePath = path.resolve("test/fixtures/invalid.jpg");
-    t.true(err instanceof Error);
-    t.is(err.message, `Invalid JPEG file: ${absolutePath}`);
-  });
+  return instance
+    .size("test/fixtures/invalid.jpg")
+    .then(t.fail, (err: Error) => {
+      const absolutePath = path.resolve("test/fixtures/invalid.jpg");
+      t.true(err instanceof Error);
+      t.is(err.message, `Invalid JPEG file: ${absolutePath}`);
+    });
 });

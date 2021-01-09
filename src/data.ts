@@ -5,7 +5,7 @@ import url from "url";
 import resolvePath from "./path";
 import encodeBuffer from "./__utils__/encodeBuffer";
 
-export default (to: string, options: any): Promise<any> => {
+export default (to: string, options: any): Promise<string> => {
   /* eslint-disable no-param-reassign */
 
   options = extend(

@@ -2,16 +2,17 @@ import extend from "lodash/extend";
 import resolveData from "./data";
 import resolvePath from "./path";
 import resolveSize from "./size";
+import { Options } from "./types";
 import resolveUrl from "./url";
 
 class Assets {
-  options: any;
+  options: Options;
 
-  constructor(options = {}) {
+  constructor(options: Options = {}) {
     this.options = extend({}, options);
   }
 
-  data(path: string): Promise<any> {
+  data(path: string): Promise<string> {
     return resolveData(path, this.options);
   }
 

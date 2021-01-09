@@ -1,29 +1,17 @@
-import extend from "lodash/extend";
 import url from "url";
 import composeAbsolutePathname from "./__utils__/composeAbsolutePathname";
 import composeQueryString from "./__utils__/composeQueryString";
 import composeRelativePathname from "./__utils__/composeRelativePathname";
 import defaultCachebuster from "./__utils__/defaultCachebuster";
 import resolvePath from "./path";
+import { Options } from "./types";
 
-export default (to: string, options: any): Promise<any> => {
-  /* eslint-disable no-param-reassign */
-
-  options = extend(
-    {
-      basePath: ".",
-      baseUrl: "/",
-      cachebuster: false,
-      relativeTo: false,
-    },
-    options
-  );
-
-  if (options.cachebuster === true) {
-    options.cachebuster = defaultCachebuster;
-  }
-
-  /* eslint-enable */
+export default (to: string, options: Options): Promise<any> => {
+  const basePath = options.basePath || ".";
+  const baseUrl = options.baseUrl || "/";
+  const cachebuster =
+    options.cachebuster === true ? defaultCachebuster : options.cachebuster;
+  const relativeTo = options.relativeTo || false;
 
   const toUrl = url.parse(to);
 
@@ -31,21 +19,21 @@ export default (to: string, options: any): Promise<any> => {
     (resolvedPath) => {
       let cachebusterOutput;
 
-      if (options.relativeTo) {
+      if (relativeTo) {
         toUrl.pathname = composeRelativePathname(
-          options.basePath,
-          options.relativeTo,
+          basePath,
+          relativeTo,
           resolvedPath
         );
       } else {
         toUrl.pathname = composeAbsolutePathname(
-          options.baseUrl,
-          options.basePath,
+          baseUrl,
+          basePath,
           resolvedPath
         );
       }
-      if (options.cachebuster) {
-        cachebusterOutput = options.cachebuster(resolvedPath, toUrl.pathname);
+      if (cachebuster) {
+        cachebusterOutput = cachebuster(resolvedPath, toUrl.pathname);
         if (cachebusterOutput) {
           if (typeof cachebusterOutput !== "object") {
             toUrl.search = composeQueryString(

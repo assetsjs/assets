@@ -91,7 +91,7 @@ test("absolute basePath + loadPaths", (t) => {
 test("non-existing file", (t) => {
   const instance = new Assets();
 
-  return instance.path("non-existing.gif").then(t.fail, (err) => {
+  return instance.path("non-existing.gif").then(t.fail, (err: Error) => {
     t.true(err instanceof Error);
     t.is(err.message, "Asset not found or unreadable: non-existing.gif");
   });
