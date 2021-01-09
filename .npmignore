@@ -6,11 +6,11 @@
 .npmignore
 .nyc_output
 .travis.yml
+__tests__
 appveyor.yml
 ava.config.js
 coverage
 media
 npm-debug.log
 src
-test
 tsconfig.json
