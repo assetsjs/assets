@@ -2,85 +2,79 @@ import path from "path";
 
 import Assets from "../src/index";
 
-test("w/o options", () => {
+test("w/o options", async () => {
   const instance = new Assets();
-  const result = instance.path("__tests__/fixtures/duplicate-1.jpg");
+  const asset = await instance.resolve("__tests__/fixtures/duplicate-1.jpg");
 
-  return expect(result).resolves.toBe(
-    path.resolve("__tests__/fixtures/duplicate-1.jpg")
-  );
+  expect(asset.path).toBe(path.resolve("__tests__/fixtures/duplicate-1.jpg"));
 });
 
-test("basePath", () => {
+test("basePath", async () => {
   const instance = new Assets({
     basePath: "__tests__/fixtures",
   });
-  const result = instance.path("duplicate-1.jpg");
+  const asset = await instance.resolve("duplicate-1.jpg");
 
-  return expect(result).resolves.toBe(
-    path.resolve("__tests__/fixtures/duplicate-1.jpg")
-  );
+  expect(asset.path).toBe(path.resolve("__tests__/fixtures/duplicate-1.jpg"));
 });
 
-test("loadPaths", () => {
+test("loadPaths", async () => {
   const instance = new Assets({
     loadPaths: ["__tests__/fixtures/fonts", "__tests__/fixtures/images"],
   });
-  const result = instance.path("picture.png");
+  const asset = await instance.resolve("picture.png");
 
-  return expect(result).resolves.toBe(
+  expect(asset.path).toBe(
     path.resolve("__tests__/fixtures/images/picture.png")
   );
 });
 
-test("loadPaths string", () => {
+test("loadPaths string", async () => {
   const instance = new Assets({
     loadPaths: "__tests__/fixtures/images",
   });
-  const result = instance.path("picture.png");
+  const asset = await instance.resolve("picture.png");
 
-  return expect(result).resolves.toBe(
+  expect(asset.path).toBe(
     path.resolve("__tests__/fixtures/images/picture.png")
   );
 });
 
-test("loadPaths glob", () => {
+test("loadPaths glob", async () => {
   const instance = new Assets({
     loadPaths: "__tests__/fixtures/*",
   });
-  const result = instance.path("picture.png");
+  const asset = await instance.resolve("picture.png");
 
-  return expect(result).resolves.toBe(
+  expect(asset.path).toBe(
     path.resolve("__tests__/fixtures/images/picture.png")
   );
 });
 
-test("basePath + loadPaths", () => {
+test("basePath + loadPaths", async () => {
   const instance = new Assets({
     basePath: "__tests__/fixtures",
     loadPaths: ["fonts", "images"],
   });
-  const result = instance.path("picture.png");
+  const asset = await instance.resolve("picture.png");
 
-  return expect(result).resolves.toBe(
+  expect(asset.path).toBe(
     path.resolve("__tests__/fixtures/images/picture.png")
   );
 });
 
-test("absolute needle + basePath", () => {
+test("absolute needle + basePath", async () => {
   const instance = new Assets({
     basePath: "__tests__/fixtures",
   });
-  const result = instance.path(
+  const asset = await instance.resolve(
     path.resolve("__tests__/fixtures/duplicate-1.jpg")
   );
 
-  return expect(result).resolves.toBe(
-    path.resolve("__tests__/fixtures/duplicate-1.jpg")
-  );
+  expect(asset.path).toBe(path.resolve("__tests__/fixtures/duplicate-1.jpg"));
 });
 
-test("absolute basePath + loadPaths", () => {
+test("absolute basePath + loadPaths", async () => {
   const instance = new Assets({
     basePath: path.resolve("__tests__/fixtures"),
     loadPaths: [
@@ -88,42 +82,39 @@ test("absolute basePath + loadPaths", () => {
       path.resolve("__tests__/fixtures/images"),
     ],
   });
-  const result = instance.path("picture.png");
+  const asset = await instance.resolve("picture.png");
 
-  return expect(result).resolves.toBe(
+  expect(asset.path).toBe(
     path.resolve("__tests__/fixtures/images/picture.png")
   );
 });
 
-test("non-existing file", () => {
+test("non-existing file", async () => {
   const instance = new Assets();
-  const result = instance.path("non-existing.gif");
 
-  return expect(result).rejects.toThrow(
+  await expect(instance.resolve("non-existing.gif")).rejects.toThrow(
     "Asset not found or unreadable: non-existing.gif"
   );
 });
 
-test("prioritize basePath over the loadPaths", () => {
+test("prioritize basePath over the loadPaths", async () => {
   const instance = new Assets({
     basePath: "__tests__/fixtures",
     loadPaths: ["fonts", "images"],
   });
-  const result = instance.path("duplicate-1.jpg");
+  const asset = await instance.resolve("duplicate-1.jpg");
 
-  return expect(result).resolves.toBe(
-    path.resolve("__tests__/fixtures/duplicate-1.jpg")
-  );
+  expect(asset.path).toBe(path.resolve("__tests__/fixtures/duplicate-1.jpg"));
 });
 
-test("prioritize firsts loadPaths over the lasts", () => {
+test("prioritize firsts loadPaths over the lasts", async () => {
   const instance = new Assets({
     basePath: "__tests__/fixtures",
     loadPaths: ["fonts", "images"],
   });
-  const result = instance.path("duplicate-2.txt");
+  const asset = await instance.resolve("duplicate-2.txt");
 
-  return expect(result).resolves.toBe(
+  expect(asset.path).toBe(
     path.resolve("__tests__/fixtures/fonts/duplicate-2.txt")
   );
 });

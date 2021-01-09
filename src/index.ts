@@ -25,10 +25,6 @@ class Assets {
         )
     );
   }
-
-  path(path: string): Promise<string> {
-    return resolvePath(path, this.options);
-  }
 }
 
 export default Assets;
