@@ -3,7 +3,6 @@ import url from "url";
 import Asset from "./Asset";
 import resolvePath from "./path";
 import { Options } from "./types";
-import resolveUrl from "./url";
 
 class Assets {
   constructor(private options: Options = {}) {}
@@ -15,17 +14,20 @@ class Assets {
       throw new Error();
     }
 
-    return resolvePath(urlObject.pathname, this.options).then(
-      (resolvedPath) => new Asset(resolvedPath, urlObject.hash || "")
+    return resolvePath(decodeURI(urlObject.pathname), this.options).then(
+      (resolvedPath) =>
+        new Asset(
+          resolvedPath,
+          urlObject.search || "",
+          urlObject.hash || "",
+          this.options.basePath || ".",
+          this.options.baseURL || "/"
+        )
     );
   }
 
   path(path: string): Promise<string> {
     return resolvePath(path, this.options);
-  }
-
-  url(path: string): Promise<string> {
-    return resolveUrl(path, this.options);
   }
 }
 

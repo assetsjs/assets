@@ -15,387 +15,437 @@ afterEach(() => {
   statSyncStub.mockRestore();
 });
 
-test("w/o options", () => {
-  const instance = new Assets();
-  const result = instance.url("__tests__/fixtures/duplicate-1.jpg");
+test("w/o options", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
+  const result = asset.toURL();
 
-  return expect(result).resolves.toBe("/__tests__/fixtures/duplicate-1.jpg");
+  expect(result).toBe("/__tests__/fixtures/duplicate-1.jpg");
 });
 
-test("basePath", () => {
-  const instance = new Assets({
+test("basePath", async () => {
+  const resolver = new Assets({
     basePath: "__tests__/fixtures",
   });
-  const result = instance.url("duplicate-1.jpg");
+  const asset = await resolver.resolve("duplicate-1.jpg");
+  const result = asset.toURL();
 
-  return expect(result).resolves.toBe("/duplicate-1.jpg");
+  expect(result).toBe("/duplicate-1.jpg");
 });
 
-test("baseUrl", () => {
-  const instance = new Assets({
-    baseUrl: "http://example.com/wp-content/themes",
+test("baseURL", async () => {
+  const resolver = new Assets({
+    baseURL: "http://example.com/wp-content/themes",
   });
-  const result = instance.url("__tests__/fixtures/duplicate-1.jpg");
+  const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
+  const result = asset.toURL();
 
-  return expect(result).resolves.toBe(
+  expect(result).toBe(
     "http://example.com/wp-content/themes/__tests__/fixtures/duplicate-1.jpg"
   );
 });
 
-test("loadPaths", () => {
-  const instance = new Assets({
+test("loadPaths", async () => {
+  const resolver = new Assets({
     loadPaths: ["__tests__/fixtures/fonts", "__tests__/fixtures/images"],
   });
-  const result = instance.url("picture.png");
+  const asset = await resolver.resolve("picture.png");
+  const result = asset.toURL();
 
-  return expect(result).resolves.toBe("/__tests__/fixtures/images/picture.png");
+  expect(result).toBe("/__tests__/fixtures/images/picture.png");
 });
 
-test("relativeTo", () => {
-  const instance = new Assets({
+test("relativeTo", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/images/picture.png");
+  const result = asset.toURL({
     relativeTo: "__tests__/fixtures/fonts",
   });
-  const result = instance.url("__tests__/fixtures/images/picture.png");
 
-  return expect(result).resolves.toBe("../images/picture.png");
+  expect(result).toBe("../images/picture.png");
 });
 
-test("basePath + baseUrl", () => {
-  const instance = new Assets({
+test("basePath + baseURL", async () => {
+  const resolver = new Assets({
     basePath: "__tests__/fixtures",
-    baseUrl: "http://example.com/wp-content/themes",
+    baseURL: "http://example.com/wp-content/themes",
   });
-  const result = instance.url("duplicate-1.jpg");
+  const asset = await resolver.resolve("duplicate-1.jpg");
+  const result = asset.toURL();
 
-  return expect(result).resolves.toBe(
-    "http://example.com/wp-content/themes/duplicate-1.jpg"
-  );
+  expect(result).toBe("http://example.com/wp-content/themes/duplicate-1.jpg");
 });
 
-test("basePath + loadPaths", () => {
-  const instance = new Assets({
+test("basePath + loadPaths", async () => {
+  const resolver = new Assets({
     basePath: "__tests__/fixtures",
     loadPaths: ["fonts", "images"],
   });
-  const result = instance.url("picture.png");
+  const asset = await resolver.resolve("picture.png");
+  const result = asset.toURL();
 
-  return expect(result).resolves.toBe("/images/picture.png");
+  expect(result).toBe("/images/picture.png");
 });
 
-test("basePath + relativeTo", () => {
-  const instance = new Assets({
+test("basePath + relativeTo", async () => {
+  const resolver = new Assets({
     basePath: "__tests__/fixtures",
+  });
+  const asset = await resolver.resolve("images/picture.png");
+  const result = asset.toURL({
     relativeTo: "fonts",
   });
-  const result = instance.url("images/picture.png");
 
-  return expect(result).resolves.toBe("../images/picture.png");
+  expect(result).toBe("../images/picture.png");
 });
 
-test("baseUrl + loadPaths", () => {
-  const instance = new Assets({
-    baseUrl: "http://example.com/wp-content/themes",
+test("baseURL + loadPaths", async () => {
+  const resolver = new Assets({
+    baseURL: "http://example.com/wp-content/themes",
     loadPaths: ["__tests__/fixtures/fonts", "__tests__/fixtures/images"],
   });
-  const result = instance.url("picture.png");
+  const asset = await resolver.resolve("picture.png");
+  const result = asset.toURL();
 
-  return expect(result).resolves.toBe(
+  expect(result).toBe(
     "http://example.com/wp-content/themes/__tests__/fixtures/images/picture.png"
   );
 });
 
-test("baseUrl + relativeTo", () => {
-  const instance = new Assets({
-    baseUrl: "http://example.com/wp-content/themes",
+test("baseURL + relativeTo", async () => {
+  const resolver = new Assets({
+    baseURL: "http://example.com/wp-content/themes",
+  });
+  const asset = await resolver.resolve("__tests__/fixtures/images/picture.png");
+  const result = asset.toURL({
     relativeTo: "__tests__/fixtures/fonts",
   });
-  const result = instance.url("__tests__/fixtures/images/picture.png");
 
-  return expect(result).resolves.toBe("../images/picture.png");
+  expect(result).toBe("../images/picture.png");
 });
 
-test("loadPaths + relativeTo", () => {
-  const instance = new Assets({
+test("loadPaths + relativeTo", async () => {
+  const resolver = new Assets({
     loadPaths: ["__tests__/fixtures/fonts", "__tests__/fixtures/images"],
+  });
+  const asset = await resolver.resolve("picture.png");
+  const result = asset.toURL({
     relativeTo: "__tests__/fixtures/fonts",
   });
-  const result = instance.url("picture.png");
 
-  return expect(result).resolves.toBe("../images/picture.png");
+  expect(result).toBe("../images/picture.png");
 });
 
-test("basePath + baseUrl + loadPaths", () => {
-  const instance = new Assets({
+test("basePath + baseURL + loadPaths", async () => {
+  const resolver = new Assets({
     basePath: "__tests__/fixtures",
-    baseUrl: "http://example.com/wp-content/themes",
+    baseURL: "http://example.com/wp-content/themes",
     loadPaths: ["fonts", "images"],
   });
-  const result = instance.url("picture.png");
+  const asset = await resolver.resolve("picture.png");
+  const result = asset.toURL();
 
-  return expect(result).resolves.toBe(
+  expect(result).toBe(
     "http://example.com/wp-content/themes/images/picture.png"
   );
 });
 
-test("basePath + baseUrl + relativeTo", () => {
-  const instance = new Assets({
+test("basePath + baseURL + relativeTo", async () => {
+  const resolver = new Assets({
     basePath: "__tests__/fixtures",
-    baseUrl: "http://example.com/wp-content/themes",
+    baseURL: "http://example.com/wp-content/themes",
+  });
+  const asset = await resolver.resolve("images/picture.png");
+  const result = asset.toURL({
     relativeTo: "fonts",
   });
-  const result = instance.url("images/picture.png");
 
-  return expect(result).resolves.toBe("../images/picture.png");
+  expect(result).toBe("../images/picture.png");
 });
 
-test("basePath + loadPaths + relativeTo", () => {
-  const instance = new Assets({
+test("basePath + loadPaths + relativeTo", async () => {
+  const resolver = new Assets({
     basePath: "__tests__/fixtures",
     loadPaths: ["fonts", "images"],
+  });
+  const asset = await resolver.resolve("picture.png");
+  const result = asset.toURL({
     relativeTo: "fonts",
   });
-  const result = instance.url("picture.png");
 
-  return expect(result).resolves.toBe("../images/picture.png");
+  expect(result).toBe("../images/picture.png");
 });
 
-test("baseUrl + loadPaths + relativeTo", () => {
-  const instance = new Assets({
-    baseUrl: "http://example.com/wp-content/themes",
+test("baseURL + loadPaths + relativeTo", async () => {
+  const resolver = new Assets({
+    baseURL: "http://example.com/wp-content/themes",
     loadPaths: ["__tests__/fixtures/fonts", "__tests__/fixtures/images"],
+  });
+  const asset = await resolver.resolve("picture.png");
+  const result = asset.toURL({
     relativeTo: "__tests__/fixtures/fonts",
   });
-  const result = instance.url("picture.png");
 
-  return expect(result).resolves.toBe("../images/picture.png");
+  expect(result).toBe("../images/picture.png");
 });
 
-test("basePath + baseUrl + loadPaths + relativeTo", () => {
-  const instance = new Assets({
+test("basePath + baseURL + loadPaths + relativeTo", async () => {
+  const resolver = new Assets({
     basePath: "__tests__/fixtures",
-    baseUrl: "http://example.com/wp-content/themes",
+    baseURL: "http://example.com/wp-content/themes",
     loadPaths: ["fonts", "images"],
+  });
+  const asset = await resolver.resolve("picture.png");
+  const result = asset.toURL({
     relativeTo: "fonts",
   });
-  const result = instance.url("picture.png");
 
-  return expect(result).resolves.toBe("../images/picture.png");
+  expect(result).toBe("../images/picture.png");
 });
 
-test("absolute basePath + relativeTo", () => {
-  const instance = new Assets({
+test("absolute basePath + relativeTo", async () => {
+  const resolver = new Assets({
     basePath: path.resolve("__tests__/fixtures"),
+  });
+  const asset = await resolver.resolve("images/picture.png");
+  const result = asset.toURL({
     relativeTo: path.resolve("__tests__/fixtures/fonts"),
   });
-  const result = instance.url("images/picture.png");
 
-  return expect(result).resolves.toBe("../images/picture.png");
+  expect(result).toBe("../images/picture.png");
 });
 
-test("non-existing file", () => {
-  const instance = new Assets();
+test("non-existing file", async () => {
+  const resolver = new Assets();
 
-  return expect(instance.url("non-existing.gif")).rejects.toThrow(
+  await expect(resolver.resolve("non-existing.gif")).rejects.toThrow(
     "Asset not found or unreadable: non-existing.gif"
   );
 });
 
-test("baseUrl w/ trailing slash", () => {
-  const instance = new Assets({
-    baseUrl: "http://example.com/wp-content/themes/",
+test("baseURL w/ trailing slash", async () => {
+  const resolver = new Assets({
+    baseURL: "http://example.com/wp-content/themes/",
   });
-  const result = instance.url("__tests__/fixtures/images/picture.png");
+  const asset = await resolver.resolve("__tests__/fixtures/images/picture.png");
+  const result = asset.toURL();
 
-  return expect(result).resolves.toBe(
+  expect(result).toBe(
     "http://example.com/wp-content/themes/__tests__/fixtures/images/picture.png"
   );
 });
 
-test("default cachebuster", () => {
-  const instance = new Assets({
+test("default cachebuster", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
+  const result = asset.toURL({
     cachebuster: true,
   });
-  const result = instance.url("__tests__/fixtures/duplicate-1.jpg");
 
-  return expect(result).resolves.toBe(
-    "/__tests__/fixtures/duplicate-1.jpg?9f057edc00"
-  );
+  expect(result).toBe("/__tests__/fixtures/duplicate-1.jpg?9f057edc00");
 });
 
-test("custom cachebuster w/ falsy result", () => {
-  const instance = new Assets({
+test("custom cachebuster w/ falsy result", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
+  const result = asset.toURL({
     cachebuster: () => {},
   });
-  const result = instance.url("__tests__/fixtures/duplicate-1.jpg");
 
-  return expect(result).resolves.toBe("/__tests__/fixtures/duplicate-1.jpg");
+  expect(result).toBe("/__tests__/fixtures/duplicate-1.jpg");
 });
 
-test("custom cachebuster w/ string result", () => {
-  const instance = new Assets({
+test("custom cachebuster w/ string result", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
+  const result = asset.toURL({
     cachebuster: () => "bust",
   });
-  const result = instance.url("__tests__/fixtures/duplicate-1.jpg");
 
-  return expect(result).resolves.toBe(
-    "/__tests__/fixtures/duplicate-1.jpg?bust"
-  );
+  expect(result).toBe("/__tests__/fixtures/duplicate-1.jpg?bust");
 });
 
-test("custom cachebuster w/ number result", () => {
-  const instance = new Assets({
+test("custom cachebuster w/ number result", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
+  const result = asset.toURL({
     cachebuster: () => 42,
   });
-  const result = instance.url("__tests__/fixtures/duplicate-1.jpg");
 
-  return expect(result).resolves.toBe("/__tests__/fixtures/duplicate-1.jpg?42");
+  expect(result).toBe("/__tests__/fixtures/duplicate-1.jpg?42");
 });
 
-test("custom cachebuster w/ pathname", () => {
-  const instance = new Assets({
-    cachebuster: () => ({ pathname: "/foo.png" }), // TODO leading slash
+test("custom cachebuster w/ pathname", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
+  const result = asset.toURL({
+    cachebuster: () => ({
+      // TODO: Leading slash
+      pathname: "/foo.png",
+    }),
   });
-  const result = instance.url("__tests__/fixtures/duplicate-1.jpg");
 
-  return expect(result).resolves.toBe("/foo.png");
+  expect(result).toBe("/foo.png");
 });
 
-test("custom cachebuster w/ query", () => {
-  const instance = new Assets({
-    cachebuster: () => ({ query: "bust" }),
+test("custom cachebuster w/ query", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
+  const result = asset.toURL({
+    cachebuster: () => ({
+      query: "bust",
+    }),
   });
-  const result = instance.url("__tests__/fixtures/duplicate-1.jpg");
 
-  return expect(result).resolves.toBe(
-    "/__tests__/fixtures/duplicate-1.jpg?bust"
+  expect(result).toBe("/__tests__/fixtures/duplicate-1.jpg?bust");
+});
+
+test("custom cachebuster w/ pathname + query", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
+  const result = asset.toURL({
+    cachebuster: () => ({
+      // TODO: Leading slash
+      pathname: "/foo.png",
+      query: "bust",
+    }),
+  });
+
+  expect(result).toBe("/foo.png?bust");
+});
+
+test("custom cachebuster arguments", async () => {
+  const cachebuster = jest.fn();
+  const resolver = new Assets({
+    basePath: "__tests__/fixtures",
+  });
+  const asset = await resolver.resolve("duplicate-1.jpg");
+
+  asset.toURL({ cachebuster });
+
+  expect(cachebuster).toHaveBeenCalledWith(
+    path.resolve("__tests__/fixtures/duplicate-1.jpg"),
+    "/duplicate-1.jpg"
   );
 });
 
-test("custom cachebuster w/ pathname + query", () => {
-  const instance = new Assets({
-    cachebuster: () => ({ pathname: "/foo.png", query: "bust" }), // TODO leading slash
-  });
-  const result = instance.url("__tests__/fixtures/duplicate-1.jpg");
-
-  return expect(result).resolves.toBe("/foo.png?bust");
-});
-
-test("custom cachebuster arguments", () => {
-  const cachebuster = jest.fn();
-
-  const instance = new Assets({
-    basePath: "__tests__/fixtures",
-    cachebuster,
-  });
-  const result = instance.url("duplicate-1.jpg");
-
-  return result.then(() => {
-    expect(cachebuster).toHaveBeenCalledWith(
-      path.resolve("__tests__/fixtures/duplicate-1.jpg"),
-      "/duplicate-1.jpg"
-    );
-  });
-});
-
-test("query + hash", () => {
-  const instance = new Assets();
-  const result = instance.url(
+test("query + hash", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
   );
+  const result = asset.toURL();
 
-  return expect(result).resolves.toBe(
+  expect(result).toBe(
     "/__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
   );
 });
 
-test("query + hash w/ default cachebuster", () => {
-  const instance = new Assets({
-    cachebuster: true,
-  });
-  const result = instance.url(
+test("query + hash w/ default cachebuster", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
   );
+  const result = asset.toURL({
+    cachebuster: true,
+  });
 
-  return expect(result).resolves.toBe(
+  expect(result).toBe(
     "/__tests__/fixtures/images/picture.png?foo=bar&baz&9f057edc00#hash"
   );
 });
 
-test("query + hash w/ custom cachebuster w/ falsy result", () => {
-  const instance = new Assets({
-    cachebuster: () => {},
-  });
-  const result = instance.url(
+test("query + hash w/ custom cachebuster w/ falsy result", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
   );
+  const result = asset.toURL({
+    cachebuster: () => {},
+  });
 
-  return expect(result).resolves.toBe(
+  expect(result).toBe(
     "/__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
   );
 });
 
-test("query + hash w/ custom cachebuster w/ string result", () => {
-  const instance = new Assets({
+test("query + hash w/ custom cachebuster w/ string result", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve(
+    "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
+  );
+  const result = asset.toURL({
     cachebuster: () => "bust",
   });
-  const result = instance.url(
-    "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
-  );
 
-  return expect(result).resolves.toBe(
+  expect(result).toBe(
     "/__tests__/fixtures/images/picture.png?foo=bar&baz&bust#hash"
   );
 });
 
-test("query + hash w/ custom cachebuster w/ pathname", () => {
-  const instance = new Assets({
-    cachebuster: () => ({ pathname: "/foo.png" }), // TODO leading slash
-  });
-  const result = instance.url(
+test("query + hash w/ custom cachebuster w/ pathname", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
   );
+  const result = asset.toURL({
+    cachebuster: () => ({
+      // TODO: Leading slash
+      pathname: "/foo.png",
+    }),
+  });
 
-  return expect(result).resolves.toBe("/foo.png?foo=bar&baz#hash");
+  expect(result).toBe("/foo.png?foo=bar&baz#hash");
 });
 
-test("query + hash w/ custom cachebuster w/ query", () => {
-  const instance = new Assets({
-    cachebuster: () => ({ query: "bust" }),
-  });
-  const result = instance.url(
+test("query + hash w/ custom cachebuster w/ query", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
   );
+  const result = asset.toURL({
+    cachebuster: () => ({
+      query: "bust",
+    }),
+  });
 
-  return expect(result).resolves.toBe(
+  expect(result).toBe(
     "/__tests__/fixtures/images/picture.png?foo=bar&baz&bust#hash"
   );
 });
 
-test("query + hash w/ custom cachebuster w/ pathname + query", () => {
-  const instance = new Assets({
-    cachebuster: () => ({ pathname: "/foo.png", query: "bust" }), // TODO leading slash
-  });
-  const result = instance.url(
+test("query + hash w/ custom cachebuster w/ pathname + query", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
   );
+  const result = asset.toURL({
+    cachebuster: () => ({
+      // TODO: Leading slash
+      pathname: "/foo.png",
+      query: "bust",
+    }),
+  });
 
-  return expect(result).resolves.toBe("/foo.png?foo=bar&baz&bust#hash");
+  expect(result).toBe("/foo.png?foo=bar&baz&bust#hash");
 });
 
-test("query + hash w/ relativeTo", () => {
-  const instance = new Assets({
+test("query + hash w/ relativeTo", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve(
+    "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
+  );
+  const result = asset.toURL({
     relativeTo: "__tests__/fixtures/fonts",
   });
-  const result = instance.url(
-    "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
-  );
 
-  return expect(result).resolves.toBe("../images/picture.png?foo=bar&baz#hash");
+  expect(result).toBe("../images/picture.png?foo=bar&baz#hash");
 });
 
-test("URI-encoded needle", () => {
-  const instance = new Assets();
-  const result = instance.url("__tests__/fixtures/white%20space.txt");
+test("URI-encoded needle", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/white%20space.txt");
+  const result = asset.toURL();
 
-  return expect(result).resolves.toBe("/__tests__/fixtures/white%20space.txt");
+  expect(result).toBe("/__tests__/fixtures/white%20space.txt");
 });

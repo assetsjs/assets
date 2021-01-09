@@ -10,8 +10,6 @@ export type Dimensions = {
 
 export type Options = {
   basePath?: string;
-  baseUrl?: string;
-  cachebuster?: CachebusterFunction | boolean;
+  baseURL?: string;
   loadPaths?: string | string[];
-  relativeTo?: string | false;
 };
