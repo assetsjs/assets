@@ -5,7 +5,7 @@ import url from "url";
 import resolvePath from "./path";
 import encodeBuffer from "./__utils__/encodeBuffer";
 
-export default (to, options): Promise<any> => {
+export default (to: string, options: any): Promise<any> => {
   /* eslint-disable no-param-reassign */
 
   options = extend(
@@ -20,8 +20,8 @@ export default (to, options): Promise<any> => {
 
   const toUrl = url.parse(to);
 
-  return resolvePath(toUrl.pathname, options).then((resolvedPath) => {
-    const mediaType = mime.getType(resolvedPath);
+  return resolvePath(toUrl.pathname!, options).then((resolvedPath) => {
+    const mediaType = mime.getType(resolvedPath)!;
     return fsPromises.readFile(resolvedPath).then((buffer) => {
       const content = encodeBuffer(buffer, mediaType);
       return `data:${mediaType};${content}${toUrl.hash || ""}`;

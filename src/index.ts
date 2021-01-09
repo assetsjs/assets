@@ -11,19 +11,19 @@ class Assets {
     this.options = extend({}, options);
   }
 
-  data(path): Promise<any> {
+  data(path: string): Promise<any> {
     return resolveData(path, this.options);
   }
 
-  path(path): Promise<any> {
+  path(path: string): Promise<any> {
     return resolvePath(path, this.options);
   }
 
-  size(path): Promise<any> {
+  size(path: string): Promise<any> {
     return resolveSize(path, this.options);
   }
 
-  url(path): Promise<any> {
+  url(path: string): Promise<any> {
     return resolveUrl(path, this.options);
   }
 }

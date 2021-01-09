@@ -6,7 +6,7 @@ import composeRelativePathname from "./__utils__/composeRelativePathname";
 import defaultCachebuster from "./__utils__/defaultCachebuster";
 import resolvePath from "./path";
 
-export default (to, options): Promise<any> => {
+export default (to: string, options: any): Promise<any> => {
   /* eslint-disable no-param-reassign */
 
   options = extend(
@@ -49,7 +49,7 @@ export default (to, options): Promise<any> => {
         if (cachebusterOutput) {
           if (typeof cachebusterOutput !== "object") {
             toUrl.search = composeQueryString(
-              toUrl.search,
+              toUrl.search!,
               String(cachebusterOutput)
             );
           } else {
@@ -58,7 +58,7 @@ export default (to, options): Promise<any> => {
             }
             if (cachebusterOutput.query) {
               toUrl.search = composeQueryString(
-                toUrl.search,
+                toUrl.search!,
                 cachebusterOutput.query
               );
             }

@@ -1,3 +1,3 @@
 import { sep } from "path";
 
-export default (path) => path.split(sep).join("/");
+export default (path: string): string => path.split(sep).join("/");
