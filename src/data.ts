@@ -1,23 +1,11 @@
-import extend from "lodash/extend";
 import { promises as fsPromises } from "fs";
 import mime from "mime";
 import url from "url";
 import resolvePath from "./path";
+import { Options } from "./types";
 import encodeBuffer from "./__utils__/encodeBuffer";
 
-export default (to: string, options: any): Promise<string> => {
-  /* eslint-disable no-param-reassign */
-
-  options = extend(
-    {
-      basePath: ".",
-      loadPaths: [],
-    },
-    options
-  );
-
-  /* eslint-enable */
-
+export default (to: string, options: Options): Promise<string> => {
   const toUrl = url.parse(to);
 
   return resolvePath(toUrl.pathname!, options).then((resolvedPath) => {
