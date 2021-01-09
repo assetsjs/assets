@@ -2,8 +2,7 @@ import url from "url";
 
 import Asset from "./Asset";
 import resolvePath from "./path";
-import resolveSize from "./size";
-import { Dimensions, Options } from "./types";
+import { Options } from "./types";
 import resolveUrl from "./url";
 
 class Assets {
@@ -23,10 +22,6 @@ class Assets {
 
   path(path: string): Promise<string> {
     return resolvePath(path, this.options);
-  }
-
-  size(path: string): Promise<Dimensions> {
-    return resolveSize(path, this.options);
   }
 
   url(path: string): Promise<string> {

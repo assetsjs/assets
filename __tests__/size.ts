@@ -2,48 +2,55 @@ import path from "path";
 
 import Assets from "../src/index";
 
-test("w/o options", () => {
-  const instance = new Assets();
-  const result = instance.size("__tests__/fixtures/duplicate-1.jpg");
+test("w/o options", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
 
-  return expect(result).resolves.toEqual({ height: 114, width: 200 });
+  await expect(asset.getDimensions()).resolves.toEqual({
+    height: 114,
+    width: 200,
+  });
 });
 
-test("basePath + loadPaths", () => {
-  const instance = new Assets({
+test("basePath + loadPaths", async () => {
+  const resolver = new Assets({
     basePath: "__tests__/fixtures",
     loadPaths: ["fonts", "images"],
   });
-  const result = instance.size("picture.png");
+  const asset = await resolver.resolve("picture.png");
 
-  return expect(result).resolves.toEqual({ height: 57, width: 200 });
+  await expect(asset.getDimensions()).resolves.toEqual({
+    height: 57,
+    width: 200,
+  });
 });
 
-test("non-existing file", () => {
-  const instance = new Assets();
-  const result = instance.size("non-existing.gif");
+test("non-existing file", async () => {
+  const resolver = new Assets();
 
-  return expect(result).rejects.toThrow(
+  await expect(resolver.resolve("non-existing.gif")).rejects.toThrow(
     "Asset not found or unreadable: non-existing.gif"
   );
 });
 
-test("nonsupported file type", () => {
-  const instance = new Assets();
-  const result = instance.size("__tests__/fixtures/fonts/empty-sans.woff");
+test("nonsupported file type", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve(
+    "__tests__/fixtures/fonts/empty-sans.woff"
+  );
 
-  return expect(result).rejects.toThrow(
+  await expect(asset.getDimensions()).rejects.toThrow(
     `File type not supported: ${path.resolve(
       "__tests__/fixtures/fonts/empty-sans.woff"
     )}`
   );
 });
 
-test("invalid file", () => {
-  const instance = new Assets();
-  const result = instance.size("__tests__/fixtures/invalid.jpg");
+test("invalid file", async () => {
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/invalid.jpg");
 
-  return expect(result).rejects.toThrow(
+  await expect(asset.getDimensions()).rejects.toThrow(
     `Invalid JPEG file: ${path.resolve("__tests__/fixtures/invalid.jpg")}`
   );
 });
