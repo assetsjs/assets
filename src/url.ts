@@ -15,7 +15,11 @@ export default (to: string, options: Options): Promise<any> => {
 
   const toUrl = url.parse(to);
 
-  return resolvePath(decodeURI(toUrl.pathname!), options).then(
+  if (!toUrl.pathname) {
+    throw new Error();
+  }
+
+  return resolvePath(decodeURI(toUrl.pathname), options).then(
     (resolvedPath) => {
       let cachebusterOutput;
 
@@ -37,7 +41,7 @@ export default (to: string, options: Options): Promise<any> => {
         if (cachebusterOutput) {
           if (typeof cachebusterOutput !== "object") {
             toUrl.search = composeQueryString(
-              toUrl.search!,
+              toUrl.search,
               String(cachebusterOutput)
             );
           } else {
@@ -46,7 +50,7 @@ export default (to: string, options: Options): Promise<any> => {
             }
             if (cachebusterOutput.query) {
               toUrl.search = composeQueryString(
-                toUrl.search!,
+                toUrl.search,
                 cachebusterOutput.query
               );
             }

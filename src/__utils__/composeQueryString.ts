@@ -1,4 +1,4 @@
-export default (current: string, addon: string): string => {
+export default (current: string | null, addon: string): string => {
   if (current) {
     return `${current}&${addon}`;
   }
