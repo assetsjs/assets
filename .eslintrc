@@ -17,10 +17,7 @@
       "parserOptions": {
         "project": "./tsconfig.eslint.json"
       },
-      "plugins": ["@typescript-eslint"],
-      "rules": {
-        "@typescript-eslint/explicit-module-boundary-types": "off"
-      }
+      "plugins": ["@typescript-eslint"]
     }
   ],
   "root": true
