@@ -1,5 +1,3 @@
-import extend from "lodash/extend";
-
 import resolveData from "./data";
 import resolvePath from "./path";
 import resolveSize from "./size";
@@ -7,11 +5,7 @@ import { Dimensions, Options } from "./types";
 import resolveUrl from "./url";
 
 class Assets {
-  options: Options;
-
-  constructor(options: Options = {}) {
-    this.options = extend({}, options);
-  }
+  constructor(private options: Options = {}) {}
 
   data(path: string): Promise<string> {
     return resolveData(path, this.options);

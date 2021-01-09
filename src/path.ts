@@ -3,16 +3,16 @@ import util from "util";
 
 import async from "async";
 import glob from "glob";
-import flatten from "lodash/flatten";
 
 import exists from "./__utils__/exists";
 import { Options } from "./types";
 
 const pglob = util.promisify(glob);
+const emptyPaths: string[] = [];
 
 export default (to: string, options: Options): Promise<string> => {
   const basePath = options.basePath || ".";
-  const loadPaths = ([] as string[]).concat(options.loadPaths || []);
+  const loadPaths = emptyPaths.concat(options.loadPaths || []);
 
   return Promise.all(
     loadPaths.map((loadPath) =>
@@ -25,7 +25,7 @@ export default (to: string, options: Options): Promise<string> => {
       )
     )
   )
-    .then((filePaths) => flatten(filePaths))
+    .then((filePaths) => emptyPaths.concat(...filePaths))
     .then((filePaths) => {
       filePaths.unshift(path.resolve(basePath, to));
 
