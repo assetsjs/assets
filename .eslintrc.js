@@ -33,6 +33,9 @@ module.exports = {
             "newlines-between": "always",
           },
         ],
+
+        // Order everything that can be ordered in a definite way:
+        "sort-keys": "warn",
       },
     },
   ],

@@ -8,7 +8,7 @@ test("w/o options", (t) => {
   const instance = new Assets();
 
   return instance.size("test/fixtures/duplicate-1.jpg").then((size) => {
-    t.deepEqual(size, { width: 200, height: 114 });
+    t.deepEqual(size, { height: 114, width: 200 });
   });
 });
 
@@ -19,7 +19,7 @@ test("basePath + loadPaths", (t) => {
   });
 
   return instance.size("picture.png").then((size) => {
-    t.deepEqual(size, { width: 200, height: 57 });
+    t.deepEqual(size, { height: 57, width: 200 });
   });
 });
 
