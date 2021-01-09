@@ -15,7 +15,7 @@ import defaultCachebuster from "./__utils__/defaultCachebuster";
 import encodeBuffer from "./__utils__/encodeBuffer";
 import { CachebusterFunction, Dimensions } from "./types";
 
-type GetURLOptions = {
+type ToURLOptions = {
   cachebuster?: CachebusterFunction | boolean;
   relativeTo?: string | false;
 };
@@ -52,7 +52,7 @@ class Asset {
     });
   }
 
-  toURL({ cachebuster, relativeTo = false }: GetURLOptions = {}): string {
+  toURL({ cachebuster, relativeTo = false }: ToURLOptions = {}): string {
     // TODO: Test for empty string
     const pathname =
       relativeTo === false
