@@ -52,6 +52,10 @@ class Asset {
     });
   }
 
+  toString(): string {
+    return `Asset(${this.path})`;
+  }
+
   toURL({ cachebuster, relativeTo = false }: ToURLOptions = {}): string {
     // TODO: Test for empty string
     const pathname =
