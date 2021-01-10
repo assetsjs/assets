@@ -13,13 +13,7 @@ import composeRelativePathname from "./__utils__/composeRelativePathname";
 import composeSearchString from "./__utils__/composeSearchString";
 import defaultCachebuster from "./__utils__/defaultCachebuster";
 import encodeBuffer from "./__utils__/encodeBuffer";
-import { CachebusterFunction, Dimensions } from "./types";
-
-type ToURLOptions = {
-  baseURL?: string;
-  cachebuster?: CachebusterFunction | boolean;
-  relativeTo?: string | false;
-};
+import { Dimensions, ToURLOptions } from "./types";
 
 const Calipers = calipers(webp, png, jpeg, gif, svg);
 

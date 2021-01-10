@@ -12,3 +12,9 @@ export type Options = {
   basePath?: string;
   loadPaths?: string | string[];
 };
+
+export type ToURLOptions = {
+  baseURL?: string;
+  cachebuster?: CachebusterFunction | boolean;
+  relativeTo?: string | false;
+};
