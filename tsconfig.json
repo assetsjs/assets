@@ -16,5 +16,9 @@
     "typeRoots": ["node_modules/@types", "types"],
     "target": "es5"
   },
+  "typedocOptions": {
+    "entryPoints": ["src/index.ts"],
+    "out": "docs"
+  },
   "include": ["src"]
 }
