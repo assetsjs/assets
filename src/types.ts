@@ -1,7 +1,7 @@
 export type CachebusterFunction = (
   resolvedPath: string,
   pathname: string
-) => { pathname?: string; query?: string } | number | string | void;
+) => { pathname?: string; search?: string } | number | string | void;
 
 export type Dimensions = {
   height: number;

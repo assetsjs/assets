@@ -9,8 +9,8 @@ import webp from "calipers-webp";
 import mime from "mime";
 
 import composeAbsolutePathname from "./__utils__/composeAbsolutePathname";
-import composeQueryString from "./__utils__/composeQueryString";
 import composeRelativePathname from "./__utils__/composeRelativePathname";
+import composeSearchString from "./__utils__/composeSearchString";
 import defaultCachebuster from "./__utils__/defaultCachebuster";
 import encodeBuffer from "./__utils__/encodeBuffer";
 import { CachebusterFunction, Dimensions } from "./types";
@@ -25,7 +25,7 @@ const Calipers = calipers(webp, png, jpeg, gif, svg);
 class Asset {
   constructor(
     public readonly path: string,
-    public readonly query: string,
+    public readonly search: string,
     public readonly hash: string,
     private readonly basePath: string,
     private readonly baseURL: string
@@ -67,31 +67,31 @@ class Asset {
       const cachebusterOutput = cb(this.path, pathname);
 
       if (typeof cachebusterOutput === "object") {
-        if (cachebusterOutput.pathname && cachebusterOutput.query) {
-          return `${cachebusterOutput.pathname}${composeQueryString(
-            this.query,
-            cachebusterOutput.query
+        if (cachebusterOutput.pathname && cachebusterOutput.search) {
+          return `${cachebusterOutput.pathname}${composeSearchString(
+            this.search,
+            cachebusterOutput.search
           )}${this.hash}`;
         }
 
         if (cachebusterOutput.pathname) {
-          return `${cachebusterOutput.pathname}${this.query}${this.hash}`;
+          return `${cachebusterOutput.pathname}${this.search}${this.hash}`;
         }
 
-        if (cachebusterOutput.query) {
-          return `${pathname}${composeQueryString(
-            this.query,
-            cachebusterOutput.query
+        if (cachebusterOutput.search) {
+          return `${pathname}${composeSearchString(
+            this.search,
+            cachebusterOutput.search
           )}${this.hash}`;
         }
       } else if (cachebusterOutput) {
-        return `${pathname}${composeQueryString(
-          this.query,
+        return `${pathname}${composeSearchString(
+          this.search,
           String(cachebusterOutput)
         )}${this.hash}`;
       }
     }
-    return `${pathname}${this.query}${this.hash}`;
+    return `${pathname}${this.search}${this.hash}`;
   }
 }
 

@@ -21,7 +21,7 @@ test("basePath + loadPaths", async () => {
   );
 });
 
-test("discard query + preserve hash", async () => {
+test("discard search + preserve hash", async () => {
   const resolver = new Assets();
   const asset = await resolver.resolve(
     "__tests__/fixtures/duplicate-1.jpg?foo=bar#hash"

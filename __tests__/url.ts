@@ -288,26 +288,26 @@ test("custom cachebuster w/ pathname", async () => {
   expect(result).toBe("/foo.png");
 });
 
-test("custom cachebuster w/ query", async () => {
+test("custom cachebuster w/ search", async () => {
   const resolver = new Assets();
   const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
   const result = asset.toURL({
     cachebuster: () => ({
-      query: "bust",
+      search: "bust",
     }),
   });
 
   expect(result).toBe("/__tests__/fixtures/duplicate-1.jpg?bust");
 });
 
-test("custom cachebuster w/ pathname + query", async () => {
+test("custom cachebuster w/ pathname + search", async () => {
   const resolver = new Assets();
   const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
   const result = asset.toURL({
     cachebuster: () => ({
       // TODO: Leading slash
       pathname: "/foo.png",
-      query: "bust",
+      search: "bust",
     }),
   });
 
@@ -329,7 +329,7 @@ test("custom cachebuster arguments", async () => {
   );
 });
 
-test("query + hash", async () => {
+test("search + hash", async () => {
   const resolver = new Assets();
   const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
@@ -341,7 +341,7 @@ test("query + hash", async () => {
   );
 });
 
-test("query + hash w/ default cachebuster", async () => {
+test("search + hash w/ default cachebuster", async () => {
   const resolver = new Assets();
   const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
@@ -355,7 +355,7 @@ test("query + hash w/ default cachebuster", async () => {
   );
 });
 
-test("query + hash w/ custom cachebuster w/ falsy result", async () => {
+test("search + hash w/ custom cachebuster w/ falsy result", async () => {
   const resolver = new Assets();
   const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
@@ -369,7 +369,7 @@ test("query + hash w/ custom cachebuster w/ falsy result", async () => {
   );
 });
 
-test("query + hash w/ custom cachebuster w/ string result", async () => {
+test("search + hash w/ custom cachebuster w/ string result", async () => {
   const resolver = new Assets();
   const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
@@ -383,7 +383,7 @@ test("query + hash w/ custom cachebuster w/ string result", async () => {
   );
 });
 
-test("query + hash w/ custom cachebuster w/ pathname", async () => {
+test("search + hash w/ custom cachebuster w/ pathname", async () => {
   const resolver = new Assets();
   const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
@@ -398,14 +398,14 @@ test("query + hash w/ custom cachebuster w/ pathname", async () => {
   expect(result).toBe("/foo.png?foo=bar&baz#hash");
 });
 
-test("query + hash w/ custom cachebuster w/ query", async () => {
+test("search + hash w/ custom cachebuster w/ search", async () => {
   const resolver = new Assets();
   const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
   );
   const result = asset.toURL({
     cachebuster: () => ({
-      query: "bust",
+      search: "bust",
     }),
   });
 
@@ -414,7 +414,7 @@ test("query + hash w/ custom cachebuster w/ query", async () => {
   );
 });
 
-test("query + hash w/ custom cachebuster w/ pathname + query", async () => {
+test("search + hash w/ custom cachebuster w/ pathname + search", async () => {
   const resolver = new Assets();
   const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
@@ -423,14 +423,14 @@ test("query + hash w/ custom cachebuster w/ pathname + query", async () => {
     cachebuster: () => ({
       // TODO: Leading slash
       pathname: "/foo.png",
-      query: "bust",
+      search: "bust",
     }),
   });
 
   expect(result).toBe("/foo.png?foo=bar&baz&bust#hash");
 });
 
-test("query + hash w/ relativeTo", async () => {
+test("search + hash w/ relativeTo", async () => {
   const resolver = new Assets();
   const asset = await resolver.resolve(
     "__tests__/fixtures/images/picture.png?foo=bar&baz#hash"
