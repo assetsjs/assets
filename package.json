@@ -23,7 +23,8 @@
     "ci": "run-s lint test",
     "coveralls": "jest && coveralls < coverage/lcov.info",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
-    "test": "jest"
+    "test": "jest",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "async": "^3.2.0",
