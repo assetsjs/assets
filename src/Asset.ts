@@ -16,6 +16,7 @@ import encodeBuffer from "./__utils__/encodeBuffer";
 import { CachebusterFunction, Dimensions } from "./types";
 
 type ToURLOptions = {
+  baseURL?: string;
   cachebuster?: CachebusterFunction | boolean;
   relativeTo?: string | false;
 };
@@ -27,8 +28,7 @@ class Asset {
     public readonly path: string,
     public readonly search: string,
     public readonly hash: string,
-    private readonly basePath: string,
-    private readonly baseURL: string
+    private readonly basePath: string
   ) {}
 
   getDimensions(): Promise<Dimensions> {
@@ -56,11 +56,15 @@ class Asset {
     return `Asset(${this.path})`;
   }
 
-  toURL({ cachebuster, relativeTo = false }: ToURLOptions = {}): string {
+  toURL({
+    baseURL = "/",
+    cachebuster = false,
+    relativeTo = false,
+  }: ToURLOptions = {}): string {
     // TODO: Test for empty string
     const pathname =
       relativeTo === false
-        ? composeAbsolutePathname(this.baseURL, this.basePath, this.path)
+        ? composeAbsolutePathname(baseURL, this.basePath, this.path)
         : composeRelativePathname(this.basePath, relativeTo, this.path);
     if (cachebuster) {
       const cb = cachebuster === true ? defaultCachebuster : cachebuster;

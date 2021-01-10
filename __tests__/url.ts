@@ -34,11 +34,11 @@ test("basePath", async () => {
 });
 
 test("baseURL", async () => {
-  const resolver = new Assets({
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
+  const result = asset.toURL({
     baseURL: "http://example.com/wp-content/themes",
   });
-  const asset = await resolver.resolve("__tests__/fixtures/duplicate-1.jpg");
-  const result = asset.toURL();
 
   expect(result).toBe(
     "http://example.com/wp-content/themes/__tests__/fixtures/duplicate-1.jpg"
@@ -68,10 +68,11 @@ test("relativeTo", async () => {
 test("basePath + baseURL", async () => {
   const resolver = new Assets({
     basePath: "__tests__/fixtures",
-    baseURL: "http://example.com/wp-content/themes",
   });
   const asset = await resolver.resolve("duplicate-1.jpg");
-  const result = asset.toURL();
+  const result = asset.toURL({
+    baseURL: "http://example.com/wp-content/themes",
+  });
 
   expect(result).toBe("http://example.com/wp-content/themes/duplicate-1.jpg");
 });
@@ -101,11 +102,12 @@ test("basePath + relativeTo", async () => {
 
 test("baseURL + loadPaths", async () => {
   const resolver = new Assets({
-    baseURL: "http://example.com/wp-content/themes",
     loadPaths: ["__tests__/fixtures/fonts", "__tests__/fixtures/images"],
   });
   const asset = await resolver.resolve("picture.png");
-  const result = asset.toURL();
+  const result = asset.toURL({
+    baseURL: "http://example.com/wp-content/themes",
+  });
 
   expect(result).toBe(
     "http://example.com/wp-content/themes/__tests__/fixtures/images/picture.png"
@@ -113,11 +115,10 @@ test("baseURL + loadPaths", async () => {
 });
 
 test("baseURL + relativeTo", async () => {
-  const resolver = new Assets({
-    baseURL: "http://example.com/wp-content/themes",
-  });
+  const resolver = new Assets();
   const asset = await resolver.resolve("__tests__/fixtures/images/picture.png");
   const result = asset.toURL({
+    baseURL: "http://example.com/wp-content/themes",
     relativeTo: "__tests__/fixtures/fonts",
   });
 
@@ -139,11 +140,12 @@ test("loadPaths + relativeTo", async () => {
 test("basePath + baseURL + loadPaths", async () => {
   const resolver = new Assets({
     basePath: "__tests__/fixtures",
-    baseURL: "http://example.com/wp-content/themes",
     loadPaths: ["fonts", "images"],
   });
   const asset = await resolver.resolve("picture.png");
-  const result = asset.toURL();
+  const result = asset.toURL({
+    baseURL: "http://example.com/wp-content/themes",
+  });
 
   expect(result).toBe(
     "http://example.com/wp-content/themes/images/picture.png"
@@ -153,10 +155,10 @@ test("basePath + baseURL + loadPaths", async () => {
 test("basePath + baseURL + relativeTo", async () => {
   const resolver = new Assets({
     basePath: "__tests__/fixtures",
-    baseURL: "http://example.com/wp-content/themes",
   });
   const asset = await resolver.resolve("images/picture.png");
   const result = asset.toURL({
+    baseURL: "http://example.com/wp-content/themes",
     relativeTo: "fonts",
   });
 
@@ -178,11 +180,11 @@ test("basePath + loadPaths + relativeTo", async () => {
 
 test("baseURL + loadPaths + relativeTo", async () => {
   const resolver = new Assets({
-    baseURL: "http://example.com/wp-content/themes",
     loadPaths: ["__tests__/fixtures/fonts", "__tests__/fixtures/images"],
   });
   const asset = await resolver.resolve("picture.png");
   const result = asset.toURL({
+    baseURL: "http://example.com/wp-content/themes",
     relativeTo: "__tests__/fixtures/fonts",
   });
 
@@ -192,11 +194,11 @@ test("baseURL + loadPaths + relativeTo", async () => {
 test("basePath + baseURL + loadPaths + relativeTo", async () => {
   const resolver = new Assets({
     basePath: "__tests__/fixtures",
-    baseURL: "http://example.com/wp-content/themes",
     loadPaths: ["fonts", "images"],
   });
   const asset = await resolver.resolve("picture.png");
   const result = asset.toURL({
+    baseURL: "http://example.com/wp-content/themes",
     relativeTo: "fonts",
   });
 
@@ -224,11 +226,11 @@ test("non-existing file", async () => {
 });
 
 test("baseURL w/ trailing slash", async () => {
-  const resolver = new Assets({
+  const resolver = new Assets();
+  const asset = await resolver.resolve("__tests__/fixtures/images/picture.png");
+  const result = asset.toURL({
     baseURL: "http://example.com/wp-content/themes/",
   });
-  const asset = await resolver.resolve("__tests__/fixtures/images/picture.png");
-  const result = asset.toURL();
 
   expect(result).toBe(
     "http://example.com/wp-content/themes/__tests__/fixtures/images/picture.png"

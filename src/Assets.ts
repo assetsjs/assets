@@ -20,8 +20,7 @@ class Assets {
           resolvedPath,
           urlObject.search || "",
           urlObject.hash || "",
-          this.options.basePath || ".",
-          this.options.baseURL || "/"
+          this.options.basePath || "."
         )
     );
   }

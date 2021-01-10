@@ -10,6 +10,5 @@ export type Dimensions = {
 
 export type Options = {
   basePath?: string;
-  baseURL?: string;
   loadPaths?: string | string[];
 };
